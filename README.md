@@ -4,10 +4,17 @@ A one-tap arcade game built for [YouTube Playables](https://developers.google.co
 
 **How to play:** you orbit a planet. Tap (or press Space) to leap off along your orbit, and get caught by the gravity ring of the next planet. Each planet collapses a few seconds after you land, so keep moving. Aim at a planet's center to score a **Perfect** (+2 up to +5 when you chain them). Grab stars for bonus points. Later planets move, and everything speeds up.
 
-- Plain HTML5 Canvas and JavaScript. No engine, no dependencies, no build step.
-- The whole bundle is about 12 KB zipped. Sounds are synthesized in code, so there are no asset files.
-- Works in portrait (phone) and landscape (desktop), with touch, mouse and keyboard.
-- Localized into English, Spanish, French, Portuguese, German, Italian, Arabic (right-to-left) and Japanese.
+### Features
+
+- **Hand-painted look, no image files.** Rocky, gas-giant, ice and lava planets, some with rings, are painted procedurally at load time. Nebula backgrounds change color with each new sector of space.
+- **Progression.** Stars collected across runs unlock six comet skins (Comet, Ember, Mint, Nova, Solar, Prism). Every few planets you enter a new sector with its own color palette and a banner.
+- **Game feel.** Perfect-landing streaks, shockwaves, screen flash and zoom, slow motion on crash, planets that shake before they collapse, a score that counts up and a "New best" badge.
+- **Onboarding.** On a player's first run, an aiming guide shows the launch direction for the first few jumps.
+- **Generative soundtrack.** An ambient pad, bass and arpeggio are synthesized live with Web Audio, along with every sound effect. Sound follows YouTube's audio setting, and there is an in-game mute button.
+- **Polished UI.** Title screen with a comet picker, pause screen, game-over card with run stats.
+- **Anywhere, any input.** Portrait (phone) and landscape (desktop) layouts, with touch, mouse and keyboard (Space to jump, ←/→ to pick a comet, P to pause, M to mute).
+- **8 languages.** English, Spanish, French, Portuguese, German, Italian, Arabic (right-to-left) and Japanese.
+- **Tiny.** Plain HTML5 Canvas and JavaScript, no engine and no dependencies. The bundle is about 25 KB zipped.
 
 ## Project layout
 
@@ -15,12 +22,16 @@ A one-tap arcade game built for [YouTube Playables](https://developers.google.co
 game/                 ← the game bundle (this is what YouTube gets)
   index.html          loads the Playables SDK first, then the game
   style.css
+  og.jpg              link-preview image for the hosted demo (not in the bundle zip)
   js/platform.js      wrapper around the YouTube Playables SDK (ytgame)
   js/i18n.js          translations
-  js/audio.js         Web Audio sound effects
-  js/game.js          gameplay, rendering, input
+  js/audio.js         Web Audio sound effects + generative music
+  js/art.js           procedural planets, glows and nebulae
+  js/skins.js         unlockable comets
+  js/game.js          gameplay, rendering, UI, input
+tests/smoke.mjs       end-to-end test: bot plays the game against a stubbed SDK
 scripts/package.sh    builds dist/orbit-hop.zip for submission
-.github/workflows/pages.yml   publishes game/ to GitHub Pages
+.github/workflows/    CI (smoke test) and GitHub Pages deploy
 ```
 
 ## Run locally
@@ -30,6 +41,22 @@ npx serve game        # or: python3 -m http.server -d game 8000
 ```
 
 Then open the printed URL. Outside YouTube, `js/platform.js` falls back to `localStorage` for saves and to the browser's language and tab visibility for the rest. The same files run unchanged inside YouTube.
+
+## Test
+
+```bash
+npm install
+npx playwright install chromium   # first time only
+npm test
+```
+
+The smoke test serves `game/`, then plays it with a bot in headless Chromium at phone, desktop and Arabic settings, using a stubbed `ytgame`. It checks:
+
+- the SDK calls happen in the right order (`firstFrameReady` → `loadData` → `gameReady`), and `saveData` and `sendScore` are called;
+- pausing and resuming work;
+- there are no page errors.
+
+Screenshots are saved to `tests/output/`. CI runs the same test on every pull request.
 
 ## YouTube Playables SDK integration
 

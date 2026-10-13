@@ -5,6 +5,12 @@
 
   const STRINGS = {
     en: {
+      play: 'Play',
+      play_again: 'Play again',
+      sector: 'Sector',
+      stars: 'Stars',
+      unlocked: 'New comet unlocked!',
+      collect: 'Collect {n} stars',
       tap_start: 'Tap to start',
       how_to: 'Tap to leap from planet to planet',
       best: 'Best',
@@ -16,6 +22,12 @@
       perfect: 'Perfect',
     },
     es: {
+      play: 'Jugar',
+      play_again: 'Jugar de nuevo',
+      sector: 'Sector',
+      stars: 'Estrellas',
+      unlocked: '¡Nuevo cometa desbloqueado!',
+      collect: 'Reúne {n} estrellas',
       tap_start: 'Toca para empezar',
       how_to: 'Toca para saltar de planeta en planeta',
       best: 'Récord',
@@ -27,6 +39,12 @@
       perfect: 'Perfecto',
     },
     fr: {
+      play: 'Jouer',
+      play_again: 'Rejouer',
+      sector: 'Secteur',
+      stars: 'Étoiles',
+      unlocked: 'Nouvelle comète débloquée !',
+      collect: 'Récoltez {n} étoiles',
       tap_start: 'Touchez pour commencer',
       how_to: 'Touchez pour sauter de planète en planète',
       best: 'Record',
@@ -38,6 +56,12 @@
       perfect: 'Parfait',
     },
     pt: {
+      play: 'Jogar',
+      play_again: 'Jogar de novo',
+      sector: 'Setor',
+      stars: 'Estrelas',
+      unlocked: 'Novo cometa desbloqueado!',
+      collect: 'Colete {n} estrelas',
       tap_start: 'Toque para começar',
       how_to: 'Toque para saltar de planeta em planeta',
       best: 'Recorde',
@@ -49,6 +73,12 @@
       perfect: 'Perfeito',
     },
     de: {
+      play: 'Spielen',
+      play_again: 'Nochmal spielen',
+      sector: 'Sektor',
+      stars: 'Sterne',
+      unlocked: 'Neuer Komet freigeschaltet!',
+      collect: 'Sammle {n} Sterne',
       tap_start: 'Zum Starten tippen',
       how_to: 'Tippe, um von Planet zu Planet zu springen',
       best: 'Rekord',
@@ -60,6 +90,12 @@
       perfect: 'Perfekt',
     },
     it: {
+      play: 'Gioca',
+      play_again: 'Gioca ancora',
+      sector: 'Settore',
+      stars: 'Stelle',
+      unlocked: 'Nuova cometa sbloccata!',
+      collect: 'Raccogli {n} stelle',
       tap_start: 'Tocca per iniziare',
       how_to: "Tocca per saltare da un pianeta all'altro",
       best: 'Record',
@@ -71,6 +107,12 @@
       perfect: 'Perfetto',
     },
     ar: {
+      play: 'العب',
+      play_again: 'العب مجددًا',
+      sector: 'القطاع',
+      stars: 'النجوم',
+      unlocked: 'تم فتح مذنب جديد!',
+      collect: 'اجمع {n} نجمة',
       tap_start: 'اضغط للبدء',
       how_to: 'اضغط للقفز من كوكب إلى آخر',
       best: 'الأفضل',
@@ -82,6 +124,12 @@
       perfect: 'ممتاز',
     },
     ja: {
+      play: 'プレイ',
+      play_again: 'もう一度',
+      sector: 'セクター',
+      stars: 'スター',
+      unlocked: '新しいすい星を解放！',
+      collect: 'スターを{n}個集めよう',
       tap_start: 'タップでスタート',
       how_to: 'タップして惑星から惑星へジャンプ',
       best: 'ベスト',
@@ -108,8 +156,10 @@
       document.documentElement.dir = I18N.rtl ? 'rtl' : 'ltr';
     },
 
-    t(key) {
-      return STRINGS[I18N.lang][key] || STRINGS.en[key] || key;
+    t(key, vars) {
+      let str = STRINGS[I18N.lang][key] || STRINGS.en[key] || key;
+      if (vars) for (const k in vars) str = str.replace(`{${k}}`, vars[k]);
+      return str;
     },
   };
 
